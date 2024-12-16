@@ -12,6 +12,25 @@ public class GraphicProject extends JFrame {
     public static void main(String[] args) {
 
         new GraphicProject();
+        try {
+            // تحديد المسار لملف الصوت
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(SoundTest.class.getResource("/resources/gameAudio.wav"));
+
+            
+            Clip clip = AudioSystem.getClip();
+
+           
+            clip.open(audioInputStream);
+
+            
+            clip.start();
+
+           
+            Thread.sleep(clip.getMicrosecondLength() / 1000);
+        } catch (UnsupportedAudioFileException | LineUnavailableException | InterruptedException | IOException e) {
+//            e.finalize();
+        }
+
     }
 
     public GraphicProject() {
