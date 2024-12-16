@@ -2,16 +2,36 @@ package Game;
 
 import com.sun.opengl.util.*;
 import javax.media.opengl.*;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class GraphicProject extends JFrame {
 
     public static void main(String[] args) {
 
         new GraphicProject();
+        try {
+            // تحديد المسار لملف الصوت
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(GraphicProject.class.getResource("/resources/gameAudio.wav"));
+
+            // الحصول على الكائن الذي يمكنه تشغيل الصوت
+            Clip clip = AudioSystem.getClip();
+
+            // تحميل الملف الصوتي في الكائن
+            clip.open(audioInputStream);
+
+            // تشغيل الصوت
+            clip.start();
+
+            // الانتظار حتى ينتهي الصوت
+            Thread.sleep(clip.getMicrosecondLength() / 1000);
+        } catch (UnsupportedAudioFileException | LineUnavailableException | InterruptedException | IOException e) {
+//            e.finalize();
+        }
     }
 
     public GraphicProject() {
