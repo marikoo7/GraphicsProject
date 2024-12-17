@@ -25,14 +25,20 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     int dinoIndex2=68;//for player2
 
     // rocks-related variables
-    int treeIndex = 65;//tree index
+    int treeIndex1 = 65;//tree index for player1
+    int treeIndex2 = 65;//tree index for player2
+
     int treeSpeed = 3; //move speed for tree
-    int x1, y1; // tree coordinates
+    int x11, y11; // tree coordinates for player1
+    int x12, y12; // tree coordinates for player2
+
     boolean isJump1 = false; //check if player1 is jumping
     int jumpy1 =6; //jump height for player1
     boolean isJump2 = false; //check if player2 is jumping
     int jumpy2 =6; //jump height for player2
-    boolean GameOver = false;
+    boolean GameOver1 = false;
+    boolean GameOver2 = false;
+
 
     int x =20, y = 60; //dino coordinates for player1
     int x2=27,y2=13; //dino coordinates for player2
@@ -113,13 +119,18 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
         if (score1 == 45){
-            GameOver = true;
+            GameOver1 = true;
             DrawPlayerOne(gl , dinoIndex1);
             DrawWin(gl);
             return;
         }
-        if (GameOver ){
+        if (GameOver1 ){
             DrawPlayerOne(gl, dinoIndex1);
+            DrawGameOver(gl);
+            return;
+        }
+        if (GameOver2 ){
+            DrawPlayerTwo(gl, dinoIndex1);
             DrawGameOver(gl);
             return;
         }
@@ -299,13 +310,13 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     }
     public void DrawPlayerOne(GL gl, int index){ //method for drawing player1
 
-        if (GameOver) {
+        if (GameOver1) {
 
             DrawSprite(gl, 45, 25, currentFrame, 0.7f, 0.5f); // Bottom area
             DrawBackground(gl);  // Draw background to keep it visible
             DrawSprite(gl, 45, 68, currentFrame, 0.7f, 0.4f); // Top area
             DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); // Show dinosaur
-            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f); // Show tree
+            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); // Show tree
 
             return; // Don't update positions or move elements
 
@@ -314,23 +325,23 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
         DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
-        if(x1>15 && x1<75) { //Range of upper frame
-            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f); //draw monster
+        if(x11>15 && x11<75) { //Range of upper frame
+            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); //draw monster
         }
 
         //collosion
-        if (checkCollision(x, y, x1, y1)) {
-            GameOver = true;
+        if (checkCollision(x, y, x11, y11)) {
+            GameOver1 = true;
             System.out.println("Collision detected! Game Over.");
             return;
         }
 
         //tree
-        x1 -= treeSpeed; //make monster move to the left
-        if(x1<0){
-            x1=maxWidth-10; //start from the beginning
-            y1=27;
-            treeIndex = (int)(Math.random()*3)+65; //for drawing randowm monsters
+        x11 -= treeSpeed; //make monster move to the left
+        if(x11<0){
+            x11=maxWidth-10; //start from the beginning
+            y11=27;
+            treeIndex1 = (int)(Math.random()*3)+65; //for drawing randowm monsters
         }
 
         //dinojump
@@ -343,7 +354,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy1 = 6;
             }
         }
-        if (isJump1 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
+        if (isJump1 && x - treeSpeed - 40 < x11 && x > x11) { // Check if the dino has passed the tree horizontally
             score1++;
             System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
         }
@@ -353,31 +364,57 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
+        if (GameOver2) {
+
+            DrawSprite(gl, 45, 25, currentFrame, 0.7f, 0.5f); // Bottom area
+            DrawBackground(gl);  // Draw background to keep it visible
+            DrawSprite(gl, 45, 68, currentFrame, 0.7f, 0.4f); // Top area
+            DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); // Show dinosaur
+            DrawSprite(gl, x2, y2, dinoIndex2, 0.2f, 0.2f); // Show dinosaur
+            DrawSprite(gl, x12, 8, treeIndex2, 0.09f, 0.09f); // Show tree
+            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); // Show tree
+
+
+            return; // Don't update positions or move elements
+
+        }
+
         DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
         DrawSprite(gl, x2, y2, dinoIndex2, 0.2f, 0.2f); //draw player2
 
 
-        if(x1>15 && x1<75) {
-            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f); //draw monster for player1
+        if(x11>15 && x11<75) {
+            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); //draw monster for player1
 
         }
-        if(x1>20 && x1<67){
-            DrawSprite(gl, x1, 8, treeIndex, 0.09f, 0.09f); //draw monster for player2
+        if(x12>20 && x12<67){
+            DrawSprite(gl, x11, 8, treeIndex2, 0.09f, 0.09f); //draw monster for player2
         }
 
         //collision
-        if (checkCollision(x, y, x1, y1)) {
-            GameOver = true;
-            System.out.println("Collision detected! Game Over.");
+        if (checkCollision(x, y, x11, y11)) { // collision monster with player1
+            GameOver2 = true;
+            System.out.println("Collision1 detected! Game Over.");
+            return;
+        }
+        if (checkCollision2(x2, y2, x12, y12)) { //collision monster with player2
+            GameOver2 = true;
+            System.out.println("Collision2 detected! Game Over.");
             return;
         }
 
         //tree
-        x1 -= treeSpeed;
-        if(x1<0){
-            x1=maxWidth-10;
-            y1=27;
-            treeIndex = (int)(Math.random()*3)+65;
+        x11 -= treeSpeed; // monster coodinates for player1
+        if(x11<0){
+            x11=maxWidth-10;
+            y11=27;
+            treeIndex1 = (int)(Math.random()*3)+65;
+        }
+        x12 -= treeSpeed;
+        if(x12<0){ //monster coordinates for player2
+            x12=maxWidth-10;
+            y12=27;
+            treeIndex2 = (int)(Math.random()*3)+65;
         }
 
         //dinojump
@@ -399,12 +436,29 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy2 = 6;
             }
         }
-        if (isJump2 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
+        if (isJump1 && x - treeSpeed - 40 < x11 && x > x11) { // Check if the dino has passed the tree horizontally
+            score1++;
+            System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
+        }
+        if (isJump2 && x - treeSpeed - 40 < x12 && x > x12) { // Check if the dino has passed the tree horizontally
             score2++;
             System.out.println("Jumped over tree! Score: " + score2); // Optional feedback
         }
     }
     private boolean checkCollision(double x1, double y1, double x2, double y2) {
+
+        double dinoWidth = 8;
+        double dinoHeight = 40;
+
+        double obstacleWidth = 8;
+        double obstacleHeight = 40;
+
+        boolean collisionX = x1 < x2 + obstacleWidth && x1 + dinoWidth > x2;
+        boolean collisionY = y1 < y2 + obstacleHeight && y1 + dinoHeight > y2;
+
+        return collisionX && collisionY;
+    }
+    private boolean checkCollision2(double x1, double y1, double x2, double y2) {
 
         double dinoWidth = 8;
         double dinoHeight = 40;
@@ -543,7 +597,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     // draw game over
 
     public void DrawGameOver(GL gl){
-        if(GameOver){
+        if(GameOver1 || GameOver2){
             DrawBackground(gl);
 
             DrawSprite(gl, 45, 70, textures.length- 13, 0.4f, 0.2f); //  Game Over
