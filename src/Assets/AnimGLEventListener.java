@@ -1,8 +1,7 @@
-package Game;
+package Assets;
 
 import Texture.TextureReader;
 import Texture.AnimListener;
-import com.sun.opengl.util.GLUT;
 
 import java.awt.event.*;
 import java.io.IOException;
@@ -16,10 +15,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     int mouseY;
     int maxHeight = 100;
     int selectedOption = 0;
-    private int score1 = 0;
-    private int score2 = 0;
-    private int time = 0;
-    private long startTime ;
+
     // dino&tree-related variables
     int dinoIndex1=61;
     int dinoIndex2=68;
@@ -102,17 +98,10 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         GL gl = gld.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glColor3f(1f,1f,1f);
-        // تمكين المزج للتعامل مع الشفافية
-        gl.glEnable(GL.GL_BLEND);
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         if (GameOver ){
             DrawPlayerOne(gl, dinoIndex1);
             return;
         }
-        long currentTime = System.currentTimeMillis();
-        double elapsedTimeInSeconds = (currentTime - startTime) / 1000.0;
-        int seconds = (int) elapsedTimeInSeconds;
         // Animation logic
         frameCounter++;
         if (frameCounter >= frameDelay) {
@@ -135,24 +124,15 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         // Calculate bounce offset for the overlay
         float bounceOffset = (float) Math.sin(bounceTime) * bounceAmplitude;
 
+
+
+
         if (isGameStarted1){
             DrawPlayerOne(gl,dinoIndex1);
-            drawscore(gl);
-            Timer(gl, seconds);
-            if (startTime == 0) { // إذا لم يتم تحديد وقت البدء بعد
-                startTime = System.currentTimeMillis();
-            }
         }
         else if(isGameStarted2){
             DrawPlayerTwo(gl,dinoIndex1);
-        drawscore(gl);
-        drawscore2(gl);
-        Timer(gl, seconds);
-        Timer2(gl, seconds);
-        if (startTime == 0) { // إذا لم يتم تحديد وقت البدء بعد
-            startTime = System.currentTimeMillis();
         }
-            }
         else {
             // Draw the list button
             DrawSprite(gl,15,83,textures.length - 9 , 0.09f,0.09f);
@@ -198,61 +178,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 //        dinoIndex++;
     }
 
-    // drawscore
-    public void drawscore(GL gl) {
-        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
-        gl.glRasterPos2f(0.4f, 0.8f); // Set text position (x, y)
-        // Use a library like FreeType for advanced font rendering
-        // For a simple example, you can use the built-in font rendering functions (if available)
-        // but they might be limited.
-        // Font font = new Font("Arial", Font.BOLD, 20); // Assuming you have a Font class
-        String Score = "Score: " + score1;
-        for (char c:Score.toCharArray()) {
-            GLUT glut =new GLUT();
-            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
-        }
-    }
-    public void drawscore2(GL gl) {
-        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
-        gl.glRasterPos2f(0.3f, -0.2f); // Set text position (x, y)
-        // Use a library like FreeType for advanced font rendering
-        // For a simple example, you can use the built-in font rendering functions (if available)
-        // but they might be limited.
-        // Font font = new Font("Arial", Font.BOLD, 20); // Assuming you have a Font class
-        String Score = "Score: " + score2;
-        for (char c:Score.toCharArray()) {
-            GLUT glut =new GLUT();
-            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
-        }
-    }
-    // Timer
-    public void Timer(GL gl,int seconds) {
-        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
-        gl.glRasterPos2f(0.4f, 0.7f); // Set text position (x, y)
-        // Use a library like FreeType for advanced font rendering
-        // For a simple example, you can use the built-in font rendering functions (if available)
-        // but they might be limited.
-        // Font font = new Font("Arial", Font.BOLD, 20); // Assuming you have a Font class
-        String Time = "Time: " + seconds + "s";
-        for (char c:Time.toCharArray()) {
-            GLUT glut =new GLUT();
-            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
-        }
-    }
 
-    public void Timer2(GL gl,int seconds) {
-        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
-        gl.glRasterPos2f(0.3f, -0.3f); // Set text position (x, y)
-        // Use a library like FreeType for advanced font rendering
-        // For a simple example, you can use the built-in font rendering functions (if available)
-        // but they might be limited.
-        // Font font = new Font("Arial", Font.BOLD, 20); // Assuming you have a Font class
-        String Time = "Time: " + seconds + "s";
-        for (char c : Time.toCharArray()) {
-            GLUT glut = new GLUT();
-            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
-        }
-    }
 
 
 
@@ -418,10 +344,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy1 = 6;
             }
         }
-        if (isJump1 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
-            score1++;
-            System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
-        }
+
     }
     public void DrawPlayerTwo(GL gl, int index){
         gl.glEnable(GL.GL_BLEND);
@@ -464,10 +387,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy1 = 6;
             }
         }
-        if (isJump1 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
-            score1++;
-            System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
-        }
         if (isJump2) {
             y2 += jumpy2;
             jumpy2 -= 1;
@@ -478,10 +397,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             }
         }
 
-        if (isJump2 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
-            score2++;
-            System.out.println("Jumped over tree! Score: " + score2); // Optional feedback
-        }
     }
     private boolean checkCollision(double x1, double y1, double x2, double y2) {
 

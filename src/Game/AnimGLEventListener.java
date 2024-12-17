@@ -17,22 +17,21 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     int selectedOption = 0;
 
     // dino&tree-related variables
-    int dinoIndex1=61;
-    int dinoIndex2=68;
+    int dinoIndex1=61; //for player1
+    int dinoIndex2=68;//for player2
 
 
-    int treeIndex = 65;
-    int x1, y1; // tress
-    boolean isJump1 = false;
-    int jumpy1 =6;
-    boolean isJump2 = false;
-    int jumpy2 =6;
-//    boolean isDown1=false;
-//    boolean isDown2=false;
+    int treeIndex = 65;//monster index
+    int treeSpeed = 3; //move speed for monster
+    int x1, y1; // monster coordinates
+    boolean isJump1 = false; //check if player1 is jumping
+    int jumpy1 =6; //jump height for player1
+    boolean isJump2 = false; //check if player2 is jumping
+    int jumpy2 =6; //jump height for player2
     boolean GameOver = false;
-    int treeSpeed = 3;
-    int x =20, y = 60;
-    int x2=27,y2=13; // player2
+
+    int x =20, y = 60; //dino coordinates for player1
+    int x2=27,y2=13; //dino coordinates for player2
 
     // Animation-related variables
     private int currentFrame = 0; // Current frame index
@@ -42,12 +41,13 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     private float bounceSpeed = 0.1f; // Speed of the bounce
     private float bounceAmplitude = 2.0f; // Height of the bounce
 
-    boolean isGameStarted1=false;
-    int dinoRate1=0;
-    int dinoMaxRate1=3;
-    int dinoRate2=0;
-    int dinoMaxRate2=6;
+    boolean isGameStarted1=false; //check if game started for player1
     boolean isGameStarted2=false;
+    int dinoRate1=0; // Range of toggling between dino legs for player1
+    int dinoMaxRate1=3;
+    int dinoRate2=0;// Range of toggling between dino legs for player2
+    int dinoMaxRate2=6;
+
 
     boolean homePageVisible = true;
 
@@ -61,7 +61,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             "frame_40_delay-0.08s.png" , "frame_41_delay-0.08s.png" , "frame_42_delay-0.08s.png" , "frame_43_delay-0.08s.png" , "frame_44_delay-0.08s.png" , "frame_45_delay-0.08s.png" , "frame_46_delay-0.08s.png" , "frame_47_delay-0.08s.png" , "frame_48_delay-0.08s.png" , "frame_49_delay-0.08s.png" ,
             "frame_50_delay-0.08s.png" , "frame_51_delay-0.08s.png" , "frame_52_delay-0.08s.png" , "frame_53_delay-0.08s.png" , "frame_54_delay-0.08s.png" , "frame_55_delay-0.08s.png" , "frame_56_delay-0.08s.png" , "frame_57_delay-0.08s.png" , "frame_58_delay-0.08s.png" , "frame_59_delay-0.08s.png" ,
             "frame_60_delay-0.08s.png" ,"playerOne-1.png","playerOne-2.png","playerOne-3.png","playerOne-1.png","rock4.png","rock5.png","rock6.png","playerTwo-2.png","playerTwo-3.png","playerTwo-1.png","how-to-play.png","you-win.png","go-back-to-menu.png","instructions.png","start-game.png","select.png","one-player.png","two-players.png","exit.png","T-ReX-GAME.png" ,"T-rexBG.png"
-    }; //68 69 70
+    };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     public int[] textures = new int[textureNames.length];
 
@@ -125,10 +125,8 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         float bounceOffset = (float) Math.sin(bounceTime) * bounceAmplitude;
 
 
-
-
         if (isGameStarted1){
-            DrawPlayerOne(gl,dinoIndex1);
+            DrawPlayerOne(gl,dinoIndex1); //if we clicked enter
         }
         else if(isGameStarted2){
             DrawPlayerTwo(gl,dinoIndex1);
@@ -147,41 +145,20 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             }
         }
 
-
+//AI
         dinoRate1++;
         if(dinoRate1>=dinoMaxRate1) {
             dinoRate1=0;
-//            if(!isDown1)
-            dinoIndex1 = (dinoIndex1 == 62) ? 63 : 62;// Toggle between bird1 (4) and bird2 (5)
-
-//            else if(isDown1){
-//                dinoIndex1 = (dinoIndex1 == 68) ? 69 : 68;
-//            }
-
+            dinoIndex1 = (dinoIndex1 == 62) ? 63 : 62;// Toggle between dino's legs for player1
         }
 
         dinoRate2++;
         if(dinoRate2>=dinoMaxRate2) {
             dinoRate2=0;
-//            if(!isDown2)
-                dinoIndex2 = (dinoIndex2 == 68) ? 69 : 68;// Toggle between bird1 (4) and bird2 (5)
-
-//            else if(isDown2){
-//                dinoIndex2 = (dinoIndex2 == 68) ? 69 : 68;
-//            }
-
+            dinoIndex2 = (dinoIndex2 == 68) ? 69 : 68;// Toggle between dino's legs for player2
         }
-
-//        if(selectedOption==0){
-//            DrawPlayerOne(gl, dinoIndex);
-//        }
-//        dinoIndex++;
     }
-
-
-
-
-
+//
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -200,45 +177,29 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         keyBits.set(key);
-
-
-//        if(key == KeyEvent.VK_SPACE){
-//            if (!isJump) {
-//                isJump = true;
-//            }
-//            dinoIndex=3;
-//        }
-
         // Up arrow key moves the selection up
         if (key == KeyEvent.VK_UP) {
             selectedOption = (selectedOption - 1 + 3) % 3; // Wrap around
         }
-
         // Down arrow key moves the selection down
          if (key == KeyEvent.VK_DOWN) {
             selectedOption = (selectedOption + 1) % 3;// Wrap around
-//             isDown1=true;
-
-
         }
-
          // Enter key (or Space) to select an option
          if (key == KeyEvent.VK_ENTER) {
-
             handleMenuSelection();// Implement this method to handle the current selection
-
         }
         if (key==KeyEvent.VK_SPACE) {
             if (!isJump1) {
-                isJump1 = true;
+                isJump1 = true; //Space key makes dino jump for player1
             }
-            dinoIndex1=64;
+            dinoIndex1=64; //index of jumping dino of player1
         }
         if (key==KeyEvent.VK_W) {
-            if (!isJump2) {
+            if (!isJump2) {//W key makes dino jump for player1
                 isJump2 = true;
             }
-            dinoIndex2=70;
+            dinoIndex2=70; // index of jumping dino of player2
         }
         if (key == KeyEvent.VK_1){
             homePageVisible = false;
@@ -298,7 +259,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glDisable(GL.GL_BLEND);
 
     }
-    public void DrawPlayerOne(GL gl, int index){
+    public void DrawPlayerOne(GL gl, int index){ //method for drawing player1
 
         if (GameOver) {
 
@@ -314,9 +275,9 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
-        DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f);
-        if(x1>15 && x1<75) {
-            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f);
+        DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
+        if(x1>15 && x1<75) { //Range of upper frame
+            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f); //draw monster
         }
 
         //collosion
@@ -327,15 +288,15 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         }
 
         //tree
-        x1 -= treeSpeed;
+        x1 -= treeSpeed; //make monster move to the left
         if(x1<0){
-            x1=maxWidth-10;
+            x1=maxWidth-10; //start from the beginning
             y1=27;
-            treeIndex = (int)(Math.random()*3)+65;
+            treeIndex = (int)(Math.random()*3)+65; //for drawing randowm monsters
         }
 
         //dinojump
-        if (isJump1) {
+        if (isJump1) { //jump handling
             y += jumpy1;
             jumpy1 -= 1;
             if (y <= 60) {
@@ -350,16 +311,16 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
-        DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f);
-        DrawSprite(gl, x2, y2, dinoIndex2, 0.2f, 0.2f);
+        DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
+        DrawSprite(gl, x2, y2, dinoIndex2, 0.2f, 0.2f); //draw player2
 
 
         if(x1>15 && x1<75) {
-            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f);
+            DrawSprite(gl, x1, 55, treeIndex, 0.09f, 0.09f); //draw monster for player1
 
         }
         if(x1>20 && x1<67){
-            DrawSprite(gl, x1, 8, treeIndex, 0.09f, 0.09f);
+            DrawSprite(gl, x1, 8, treeIndex, 0.09f, 0.09f); //draw monster for player2
         }
 
         //collision
@@ -378,7 +339,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         }
 
         //dinojump
-        if (isJump1) {
+        if (isJump1) { //jump handling for player1
             y += jumpy1;
             jumpy1 -= 1;
             if (y <= 60) {
@@ -387,7 +348,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy1 = 6;
             }
         }
-        if (isJump2) {
+        if (isJump2) { //jump handling for player2
             y2 += jumpy2;
             jumpy2 -= 1;
             if (y2 <= 13) {
@@ -470,12 +431,11 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         switch (selectedOption) {
             case 0:
                 System.out.println("1-Player Mode Selected");
-                startGame1();
-
+                startGame1(); // start game for player1
                 break;
             case 1:
                 System.out.println("2-Players Mode Selected");
-                startGame2();
+                startGame2(); //start game for player1 & player2
                 break;
             case 2:
                 System.out.println("Exit Selected");
