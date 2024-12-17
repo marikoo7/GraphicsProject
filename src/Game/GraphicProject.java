@@ -9,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class GraphicProject extends JFrame {
+public class  GraphicProject extends JFrame {
 
     public static void main(String[] args) {
 
