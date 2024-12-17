@@ -68,7 +68,7 @@ public class  GraphicProject extends JFrame {
     private void configureWindow() {
         setTitle(" T-REX GAME :D ");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 700);
+        setSize(900, 900);
         setLocationRelativeTo(null);
         setVisible(true);
         setFocusable(true);
