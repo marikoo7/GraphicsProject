@@ -2,28 +2,32 @@ package Game;
 
 import Texture.TextureReader;
 import Texture.AnimListener;
+import com.sun.opengl.util.GLUT;
 
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.BitSet;
+import java.util.Timer;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.GLU;
 
 public class AnimGLEventListener extends AnimListener implements MouseListener , MouseMotionListener{
     int maxWidth = 100;
+    int maxHeight = 100;
     int mouseX;
     int mouseY;
-    int maxHeight = 100;
+
+    // menu selection
     int selectedOption = 0;
 
     // dino&tree-related variables
     int dinoIndex1=61; //for player1
     int dinoIndex2=68;//for player2
 
-
-    int treeIndex = 65;//monster index
-    int treeSpeed = 3; //move speed for monster
-    int x1, y1; // monster coordinates
+    // rocks-related variables
+    int treeIndex = 65;//tree index
+    int treeSpeed = 3; //move speed for tree
+    int x1, y1; // tree coordinates
     boolean isJump1 = false; //check if player1 is jumping
     int jumpy1 =6; //jump height for player1
     boolean isJump2 = false; //check if player2 is jumping
@@ -51,6 +55,12 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
     boolean homePageVisible = true;
 
+    // Time and score related variables
+
+    private int score1 = 0;
+    private int score2 = 0;
+    private long startTime ;
+
     public AnimGLEventListener() {
     }
 
@@ -60,7 +70,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             "frame_30_delay-0.08s.png", "frame_31_delay-0.08s.png" , "frame_32_delay-0.08s.png" , "frame_33_delay-0.08s.png" , "frame_34_delay-0.08s.png" , "frame_35_delay-0.08s.png" , "frame_36_delay-0.08s.png" , "frame_37_delay-0.08s.png" , "frame_38_delay-0.08s.png" , "frame_39_delay-0.08s.png" ,
             "frame_40_delay-0.08s.png" , "frame_41_delay-0.08s.png" , "frame_42_delay-0.08s.png" , "frame_43_delay-0.08s.png" , "frame_44_delay-0.08s.png" , "frame_45_delay-0.08s.png" , "frame_46_delay-0.08s.png" , "frame_47_delay-0.08s.png" , "frame_48_delay-0.08s.png" , "frame_49_delay-0.08s.png" ,
             "frame_50_delay-0.08s.png" , "frame_51_delay-0.08s.png" , "frame_52_delay-0.08s.png" , "frame_53_delay-0.08s.png" , "frame_54_delay-0.08s.png" , "frame_55_delay-0.08s.png" , "frame_56_delay-0.08s.png" , "frame_57_delay-0.08s.png" , "frame_58_delay-0.08s.png" , "frame_59_delay-0.08s.png" ,
-            "frame_60_delay-0.08s.png" ,"playerOne-1.png","playerOne-2.png","playerOne-3.png","playerOne-1.png","rock4.png","rock5.png","rock6.png","playerTwo-2.png","playerTwo-3.png","playerTwo-1.png","how-to-play.png","you-win.png","go-back-to-menu.png","instructions.png","start-game.png","select.png","one-player.png","two-players.png","exit.png","T-ReX-GAME.png" ,"T-rexBG.png"
+            "frame_60_delay-0.08s.png" ,"playerOne-1.png","playerOne-2.png","playerOne-3.png","playerOne-1.png","rock4.png","rock5.png","rock6.png","playerTwo-2.png","playerTwo-3.png","playerTwo-1.png","game-over.png","you-win!.png","how-to-play.png","you-win.png","go-back-to-menu.png","instructions.png","start-game.png","select.png","one-player.png","two-players.png","exit.png","T-ReX-GAME.png" ,"T-rexBG.png"
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     public int[] textures = new int[textureNames.length];
@@ -98,10 +108,27 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         GL gl = gld.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);
         gl.glLoadIdentity();
-        if (GameOver ){
-            DrawPlayerOne(gl, dinoIndex1);
+        gl.glColor3f(1f,1f,1f);
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+        if (score1 == 45){
+            GameOver = true;
+            DrawPlayerOne(gl , dinoIndex1);
+            DrawWin(gl);
             return;
         }
+        if (GameOver ){
+            DrawPlayerOne(gl, dinoIndex1);
+            DrawGameOver(gl);
+            return;
+        }
+
+        // Time
+        long currentTime = System.currentTimeMillis();
+        double elapsedTimeInSeconds = (currentTime - startTime) / 1000.0;
+        int seconds = (int) elapsedTimeInSeconds;
+
         // Animation logic
         frameCounter++;
         if (frameCounter >= frameDelay) {
@@ -127,9 +154,21 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         if (isGameStarted1){
             DrawPlayerOne(gl,dinoIndex1); //if we clicked enter
+            DrawScore1(gl);
+            Timer1(gl, seconds);
+            if (startTime == 0){
+                startTime = System.currentTimeMillis();
+            }
         }
         else if(isGameStarted2){
             DrawPlayerTwo(gl,dinoIndex1);
+            DrawScore1(gl);
+            DrawScore2(gl);
+            Timer1(gl, seconds);
+            Timer2(gl, seconds);
+            if (startTime == 0){
+                startTime = System.currentTimeMillis();
+            }
         }
         else {
             // Draw the list button
@@ -145,7 +184,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             }
         }
 
-//AI
+        // AI
         dinoRate1++;
         if(dinoRate1>=dinoMaxRate1) {
             dinoRate1=0;
@@ -158,7 +197,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             dinoIndex2 = (dinoIndex2 == 68) ? 69 : 68;// Toggle between dino's legs for player2
         }
     }
-//
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -305,6 +343,10 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy1 = 6;
             }
         }
+        if (isJump1 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
+            score1++;
+            System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
+        }
 
     }
     public void DrawPlayerTwo(GL gl, int index){
@@ -357,7 +399,10 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 jumpy2 = 6;
             }
         }
-
+        if (isJump2 && x - treeSpeed - 40 < x1 && x > x1) { // Check if the dino has passed the tree horizontally
+            score2++;
+            System.out.println("Jumped over tree! Score: " + score2); // Optional feedback
+        }
     }
     private boolean checkCollision(double x1, double y1, double x2, double y2) {
 
@@ -442,6 +487,67 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 System.exit(0);
                 break;
         }
+    }
+
+    // draw score
+    public void DrawScore1(GL gl){
+        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
+        gl.glRasterPos2f(0.4f, 0.8f); // Set text position (x, y)
+        String Score = "Score: " + score1;
+        for (char c:Score.toCharArray()) {
+            GLUT glut =new GLUT();
+            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
+        }
+    }
+    public void DrawScore2(GL gl){
+        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
+        gl.glRasterPos2f(0.3f, -0.2f); // Set text position (x, y)
+        String Score = "Score: " + score2;
+        for (char c:Score.toCharArray()) {
+            GLUT glut =new GLUT();
+            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
+        }
+    }
+
+    // draw Timer
+
+    public void Timer1(GL gl,int seconds) {
+        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
+        gl.glRasterPos2f(0.4f, 0.7f); // Set text position (x, y)
+        String Time = "Time: " + seconds + "s";
+        for (char c:Time.toCharArray()) {
+            GLUT glut =new GLUT();
+            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
+        }
+    }
+
+    public void Timer2(GL gl,int seconds) {
+        gl.glColor3f(0.0f, 0.0f, 0.0f); // Set color to black
+        gl.glRasterPos2f(0.3f, -0.3f); // Set text position (x, y)
+        String Time = "Time: " + seconds + "s";
+        for (char c : Time.toCharArray()) {
+            GLUT glut = new GLUT();
+            glut.glutBitmapCharacter(GLUT.BITMAP_HELVETICA_18, c);
+        }
+    }
+
+    // draw win
+    public void DrawWin(GL gl){
+        if(score1 == 45){
+            DrawBackground(gl);
+
+            DrawSprite(gl, 45, 70, textures.length- 12, 0.4f, 0.2f);
+        }
+    }
+
+    // draw game over
+
+    public void DrawGameOver(GL gl){
+        if(GameOver){
+            DrawBackground(gl);
+
+            DrawSprite(gl, 45, 70, textures.length- 13, 0.4f, 0.2f); //  Game Over
+            System.out.println("Game Over!");}
     }
     public void startGame1() {
         isGameStarted1 = true;

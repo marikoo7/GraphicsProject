@@ -15,19 +15,17 @@ public class GraphicProject extends JFrame {
 
         new GraphicProject();
         try {
-            // تحديد المسار لملف الصوت
+            // select the path of the audio
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(GraphicProject.class.getResource("/resources/gameAudio.wav"));
 
-            // الحصول على الكائن الذي يمكنه تشغيل الصوت
             Clip clip = AudioSystem.getClip();
 
-            // تحميل الملف الصوتي في الكائن
             clip.open(audioInputStream);
 
-            // تشغيل الصوت
+            // start the audio
             clip.start();
 
-            // الانتظار حتى ينتهي الصوت
+            // wait until the audio is finished
             Thread.sleep(clip.getMicrosecondLength() / 1000);
         } catch (UnsupportedAudioFileException | LineUnavailableException | InterruptedException | IOException e) {
 //            e.finalize();
@@ -48,7 +46,7 @@ public class GraphicProject extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!animator.isAnimating()) {
                     animator.start();
-                    startButton.setText("Stop Game");
+                    startButton.setText("Pause");
                 } else {
                     animator.stop();
                     startButton.setText("Start Game");
