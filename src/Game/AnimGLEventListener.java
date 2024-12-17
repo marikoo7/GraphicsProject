@@ -250,12 +250,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             }
             dinoIndex2=70; // index of jumping dino of player2
         }
-        if (key == KeyEvent.VK_1){
-            homePageVisible = false;
-        }
-        if (key == KeyEvent.VK_2){
-            homePageVisible = true;
-        }
     }
 
 
@@ -326,25 +320,25 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
         if(x11>15 && x11<75) { //Range of upper frame
-            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); //draw monster
+            DrawSprite(gl, x11, 55, treeIndex1, 0.09f, 0.09f); //draw tree
         }
 
-        //collosion
+        // collision
         if (checkCollision(x, y, x11, y11)) {
             GameOver1 = true;
             System.out.println("Collision detected! Game Over.");
             return;
         }
 
-        //tree
+        // tree
         x11 -= treeSpeed; //make monster move to the left
-        if(x11<0){
-            x11=maxWidth-10; //start from the beginning
-            y11=27;
-            treeIndex1 = (int)(Math.random()*3)+65; //for drawing randowm monsters
+        if(x11 < 0){
+            x11 = maxWidth-10; //start from the beginning
+            y11 = 27;
+            treeIndex1 = (int)(Math.random()*3)+65; //for drawing random trees
         }
 
-        //dinojump
+        //dino jump
         if (isJump1) { //jump handling
             y += jumpy1;
             jumpy1 -= 1;
@@ -356,7 +350,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         }
         if (isJump1 && x - treeSpeed - 40 < x11 && x > x11) { // Check if the dino has passed the tree horizontally
             score1++;
-            System.out.println("Jumped over tree! Score: " + score1); // Optional feedback
+            System.out.println("Jumped over tree! Score: " + score1);
         }
 
     }
@@ -392,28 +386,28 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         }
 
         //collision
-        if (checkCollision(x, y, x11, y11)) { // collision monster with player1
+        if (!isJump1 && checkCollision(x, y, x11, y11)) { // collision monster with player1
             GameOver2 = true;
             System.out.println("Collision1 detected! Game Over.");
             return;
         }
-        if (checkCollision2(x2, y2, x12, y12)) { //collision monster with player2
+        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) { //collision monster with player2
             GameOver2 = true;
             System.out.println("Collision2 detected! Game Over.");
             return;
         }
 
         //tree
-        x11 -= treeSpeed; // monster coodinates for player1
+        x11 -= treeSpeed; // tree coordinates for player1
         if(x11<0){
-            x11=maxWidth-10;
-            y11=27;
+            x11 = maxWidth-10;
+            y11 = 27;
             treeIndex1 = (int)(Math.random()*3)+65;
         }
         x12 -= treeSpeed;
-        if(x12<0){ //monster coordinates for player2
-            x12=maxWidth-10;
-            y12=27;
+        if(x12<0){ // tree coordinates for player2
+            x12 = maxWidth-10;
+            y12 = 27;
             treeIndex2 = (int)(Math.random()*3)+65;
         }
 
@@ -622,13 +616,13 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
     @Override
     public void mousePressed(MouseEvent e) {
-        int mouseX = e.getX();
-        int mouseY = e.getY();
+        mouseX = (int) convertX(e.getX(), e.getComponent().getWidth(), 0, 100);
+        mouseY = (int) convertY(e.getY(), e.getComponent().getHeight(), 0, 100);
 
         // Check if the mouse click is within the Instructions button
         if (mouseX <= 83 && mouseX >= 76 && mouseY <= 91 && mouseY >= 84){
             homePageVisible = false;
-            System.out.println("int selected");
+            System.out.println("instructions selected");
         }
 
         // Check if the mouse click is within the List button

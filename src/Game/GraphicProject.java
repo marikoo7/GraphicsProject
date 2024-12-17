@@ -37,6 +37,7 @@ public class GraphicProject extends JFrame {
         GLCanvas glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
+        glcanvas.addMouseListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
         Animator animator = new FPSAnimator(glcanvas, 30);
         JButton startButton = new JButton("Start Game");
