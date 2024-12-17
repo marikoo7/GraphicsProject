@@ -660,12 +660,22 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
     // draw game over
 
-    public void DrawGameOver(GL gl){
-        if(GameOver1 || GameOver2){
+    public void DrawGameOver(GL gl) {
+        if(GameOver1){
             DrawBackground(gl);
-
-            DrawSprite(gl, 45, 70, textures.length- 13, 0.4f, 0.2f); //  Game Over
-            System.out.println("Game Over!");}
+            DrawSprite(gl, 45, 70, textures.length - 13, 0.4f, 0.2f); //  Game Over
+        }
+        if (GameOver1 && GameOver2) {
+            if (playerLives1 == 0) {
+                DrawBackground(gl);
+                DrawSprite(gl, 45, 25, textures.length - 12, 0.4f, 0.2f); //  Game Over
+                System.out.println("Player 1 wins!");
+            } else if (playerLives2 == 0) {
+                DrawBackground(gl);
+                DrawSprite(gl, 45, 70, textures.length - 12, 0.4f, 0.2f); //  Game Over
+                System.out.println("Player 2 wins!");
+            }
+        }
     }
     public void startGame1() {
         isGameStarted1 = true;
