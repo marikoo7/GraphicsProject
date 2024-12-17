@@ -77,7 +77,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     boolean hasCollided1 = false;
     boolean hasCollided2 = false;
 
-    // level-up
+    // Level-up
 
     double treeSpeed1 = 2;
     double treeSpeed2 = 2;
