@@ -67,19 +67,19 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     private int score2 = 0;
     private long startTime ;
 
-<<<<<<< HEAD
     //ives
     int life1Index = 71;
     int life2Index = 72;
     int life3Index = 73;
-    int playerLives = 3;
+    int playerLives1 = 3;
+    int playerLives2 = 3;
     int lifex=15;
     int lifey=85;
     int lifey2=36;
-    boolean hasCollided = false;
+    boolean hasCollided1 = false;
+    boolean hasCollided2 = false;
 
-=======
->>>>>>> b56af74d79ff46f5ad98e09f0c60762553c3a075
+
     public AnimGLEventListener() {
     }
 
@@ -89,11 +89,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
             "frame_30_delay-0.08s.png", "frame_31_delay-0.08s.png" , "frame_32_delay-0.08s.png" , "frame_33_delay-0.08s.png" , "frame_34_delay-0.08s.png" , "frame_35_delay-0.08s.png" , "frame_36_delay-0.08s.png" , "frame_37_delay-0.08s.png" , "frame_38_delay-0.08s.png" , "frame_39_delay-0.08s.png" ,
             "frame_40_delay-0.08s.png" , "frame_41_delay-0.08s.png" , "frame_42_delay-0.08s.png" , "frame_43_delay-0.08s.png" , "frame_44_delay-0.08s.png" , "frame_45_delay-0.08s.png" , "frame_46_delay-0.08s.png" , "frame_47_delay-0.08s.png" , "frame_48_delay-0.08s.png" , "frame_49_delay-0.08s.png" ,
             "frame_50_delay-0.08s.png" , "frame_51_delay-0.08s.png" , "frame_52_delay-0.08s.png" , "frame_53_delay-0.08s.png" , "frame_54_delay-0.08s.png" , "frame_55_delay-0.08s.png" , "frame_56_delay-0.08s.png" , "frame_57_delay-0.08s.png" , "frame_58_delay-0.08s.png" , "frame_59_delay-0.08s.png" ,
-<<<<<<< HEAD
             "frame_60_delay-0.08s.png" ,"playerOne-1.png","playerOne-2.png","playerOne-3.png","playerOne-1.png","rock4.png","rock5.png","rock6.png","playerTwo-2.png","playerTwo-3.png","playerTwo-1.png","life1.png","life2.png","life3.png","game-over.png","you-win!.png","how-to-play.png","you-win.png","go-back-to-menu.png","instructions.png","start-game.png","select.png","one-player.png","two-players.png","exit.png","T-ReX-GAME.png" ,"T-rexBG.png"
-=======
-            "frame_60_delay-0.08s.png" ,"playerOne-1.png","playerOne-2.png","playerOne-3.png","playerOne-1.png","rock4.png","rock5.png","rock6.png","playerTwo-2.png","playerTwo-3.png","playerTwo-1.png","game-over.png","you-win!.png","how-to-play.png","you-win.png","go-back-to-menu.png","instructions.png","start-game.png","select.png","one-player.png","two-players.png","exit.png","T-ReX-GAME.png" ,"T-rexBG.png"
->>>>>>> b56af74d79ff46f5ad98e09f0c60762553c3a075
     };
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     public int[] textures = new int[textureNames.length];
@@ -319,7 +315,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glDisable(GL.GL_BLEND);
 
     }
-<<<<<<< HEAD
     public void drawLives1(GL gl, int lives) {
         if (lives >= 1) DrawSprite(gl, lifex, lifey, life1Index, 0.05f, 0.05f);
         if (lives >= 2) DrawSprite(gl, lifex + 5, lifey, life2Index, 0.05f, 0.05f);
@@ -333,8 +328,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     public  void resettreeposition(){
         x11=100;
     }
-=======
->>>>>>> b56af74d79ff46f5ad98e09f0c60762553c3a075
     public void DrawPlayerOne(GL gl, int index){ //method for drawing player1
 
         if (GameOver1) {
@@ -351,7 +344,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
         //lives
-        drawLives1(gl, playerLives);
+        drawLives1(gl, playerLives1);
 
         DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
         if(x11>15 && x11<75) { //Range of upper frame
@@ -359,26 +352,19 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         }
 
         // collision
-<<<<<<< HEAD
         if (checkCollision(x, y, x11, 55) && !isJump1) {
-            if (!hasCollided) {
-                playerLives--;
-                System.out.println("Collision detected! Lives left: " + playerLives);
-                hasCollided = true;
-                if (playerLives <= 0) {
+            if (!hasCollided1) {
+                playerLives1--;
+                System.out.println("Collision detected! Lives left: " + playerLives1);
+                hasCollided1 = true;
+                if (playerLives1 <= 0) {
                     GameOver1 = true;
                 } else {
                     resettreeposition();
                 }
             }
         } else if (!checkCollision(x, y, x11, 55)) {
-            hasCollided = false;
-=======
-        if (checkCollision(x, y, x11, y11)) {
-            GameOver1 = true;
-            System.out.println("Collision detected! Game Over.");
-            return;
->>>>>>> b56af74d79ff46f5ad98e09f0c60762553c3a075
+            hasCollided1 = false;
         }
 
         // tree
@@ -409,13 +395,10 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
        //lives
-        drawLives1(gl, playerLives);
+        drawLives1(gl, playerLives1);
 
-<<<<<<< HEAD
-        drawLives2(gl, playerLives);
+        drawLives2(gl, playerLives2);
 
-=======
->>>>>>> b56af74d79ff46f5ad98e09f0c60762553c3a075
         if (GameOver2) {
 
             DrawSprite(gl, 45, 25, currentFrame, 0.7f, 0.5f); // Bottom area
@@ -445,14 +428,34 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         //collision
         if (!isJump1 && checkCollision(x, y, x11, y11)) { // collision monster with player1
-            GameOver2 = true;
-            System.out.println("Collision1 detected! Game Over.");
-            return;
+            if (!hasCollided1) {
+                playerLives1--;
+                System.out.println("Collision detected! Lives left: " + playerLives1);
+                hasCollided1 = true;
+                if (playerLives1 <= 0) {
+                    GameOver2 = true;
+                } else {
+                    resettreeposition();
+                }
+            }
+        } else if (!checkCollision(x, y, x11, 55)) {
+            hasCollided1 = false;
+
         }
-        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) { //collision monster with player2
-            GameOver2 = true;
-            System.out.println("Collision2 detected! Game Over.");
-            return;
+        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) {
+            if (!hasCollided2) {
+                playerLives2--;
+                System.out.println("Collision detected! Lives left: " + playerLives2);
+                hasCollided2 = true;
+                if (playerLives2 <= 0) {
+                    GameOver2 = true;
+                } else {
+                    resettreeposition();
+                }
+            }
+        } else if (!checkCollision(x, y, x11, 55)) {
+            hasCollided2 = false;//collision monster with player2
+
         }
 
         //tree
