@@ -7,7 +7,6 @@ import com.sun.opengl.util.GLUT;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.BitSet;
-import java.util.Timer;
 import javax.media.opengl.*;
 import javax.media.opengl.glu.GLU;
 
@@ -72,9 +71,8 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     int life2Index = 72;
     int life3Index = 73;
     int playerLives = 3;
-    int lifex=15;
-    int lifey=85;
-    int lifey2=36;
+    int lifeX =15;
+    int lifeY =85;
     boolean hasCollided = false;
 
     public AnimGLEventListener() {
@@ -312,15 +310,10 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glDisable(GL.GL_BLEND);
 
     }
-    public void drawLives1(GL gl, int lives) {
-        if (lives >= 1) DrawSprite(gl, lifex, lifey, life1Index, 0.05f, 0.05f);
-        if (lives >= 2) DrawSprite(gl, lifex + 5, lifey, life2Index, 0.05f, 0.05f);
-        if (lives >= 3) DrawSprite(gl, lifex + 10, lifey, life3Index, 0.05f, 0.05f);
-    }
-    public void drawLives2(GL gl, int lives) {
-        if (lives >= 1) DrawSprite(gl, lifex+5, lifey2, life1Index, 0.05f, 0.05f);
-        if (lives >= 2) DrawSprite(gl, lifex + 10, lifey2, life2Index, 0.05f, 0.05f);
-        if (lives >= 3) DrawSprite(gl, lifex + 15, lifey2, life3Index, 0.05f, 0.05f);
+    public void drawLives(GL gl, int lives) {
+        if (lives >= 1) DrawSprite(gl, lifeX, lifeY, life1Index, 0.05f, 0.05f);
+        if (lives >= 2) DrawSprite(gl, lifeX + 5, lifeY, life2Index, 0.05f, 0.05f);
+        if (lives >= 3) DrawSprite(gl, lifeX + 10, lifeY, life3Index, 0.05f, 0.05f);
     }
     public  void resettreeposition(){
         x11=100;
@@ -341,7 +334,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
         //lives
-        drawLives1(gl, playerLives);
+        drawLives(gl, playerLives);
 
         DrawSprite(gl, x, y, dinoIndex1, 0.2f, 0.2f); //draw player1
         if(x11>15 && x11<75) { //Range of upper frame
@@ -391,10 +384,6 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     public void DrawPlayerTwo(GL gl, int index){
         gl.glEnable(GL.GL_BLEND);
         gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
-       //lives
-        drawLives1(gl, playerLives);
-
-        drawLives2(gl, playerLives);
 
         if (GameOver2) {
 
@@ -425,38 +414,14 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         //collision
         if (!isJump1 && checkCollision(x, y, x11, y11)) { // collision monster with player1
-            if (!hasCollided) {
-                playerLives--;
-                System.out.println("Collision detected! Lives left: " + playerLives);
-                hasCollided = true;
-                if (playerLives <= 0) {
-                    GameOver2 = true;
-                } else {
-                    resettreeposition();
-                }
-            }
-        } else if (!checkCollision(x, y, x11, 55)) {
-            hasCollided = false;
-//            GameOver2 = true;
-//            System.out.println("Collision1 detected! Game Over.");
-//            return;
+            GameOver2 = true;
+            System.out.println("Collision1 detected! Game Over.");
+            return;
         }
-        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) {
-            if (!hasCollided) {
-                playerLives--;
-                System.out.println("Collision detected! Lives left: " + playerLives);
-                hasCollided = true;
-                if (playerLives <= 0) {
-                    GameOver2 = true;
-                } else {
-                    resettreeposition();
-                }
-            }
-        } else if (!checkCollision(x, y, x11, 55)) {
-            hasCollided = false;//collision monster with player2
-//            GameOver2 = true;
-//            System.out.println("Collision2 detected! Game Over.");
-//            return;
+        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) { //collision monster with player2
+            GameOver2 = true;
+            System.out.println("Collision2 detected! Game Over.");
+            return;
         }
 
         //tree
