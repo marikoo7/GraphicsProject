@@ -335,8 +335,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
         if (lives >= 3) DrawSprite(gl, lifeX + 15, lifeY2, life3Index, 0.05f, 0.05f);
     }
     public  void resetTreeOption(){
-        x11 = 100;
-        x12 = 100;
+        x11=100;
     }
     public void DrawPlayerOne(GL gl, int index){ //method for drawing player1
 
@@ -433,7 +432,7 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         }
         if(x12>20 && x12<67){
-            DrawSprite(gl, x11, 8, treeIndex2, 0.09f, 0.09f); //draw monster for player2
+            DrawSprite(gl, x12, 8, treeIndex2, 0.09f, 0.09f); //draw monster for player2
         }
 
         //collision
