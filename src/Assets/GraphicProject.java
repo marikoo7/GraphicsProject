@@ -1,5 +1,6 @@
-package Game;
+package Assets;
 
+import Game.AnimGLEventListener;
 import com.sun.opengl.util.*;
 import javax.media.opengl.*;
 import javax.sound.sampled.*;
@@ -15,17 +16,19 @@ public class GraphicProject extends JFrame {
 
         new GraphicProject();
         try {
-            // select the path of the audio
+            // تحديد المسار لملف الصوت
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(GraphicProject.class.getResource("/resources/gameAudio.wav"));
 
+            // الحصول على الكائن الذي يمكنه تشغيل الصوت
             Clip clip = AudioSystem.getClip();
 
+            // تحميل الملف الصوتي في الكائن
             clip.open(audioInputStream);
 
-            // start the audio
+            // تشغيل الصوت
             clip.start();
 
-            // wait until the audio is finished
+            // الانتظار حتى ينتهي الصوت
             Thread.sleep(clip.getMicrosecondLength() / 1000);
         } catch (UnsupportedAudioFileException | LineUnavailableException | InterruptedException | IOException e) {
 //            e.finalize();
@@ -37,7 +40,6 @@ public class GraphicProject extends JFrame {
         GLCanvas glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
-        glcanvas.addMouseListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
         Animator animator = new FPSAnimator(glcanvas, 30);
         JButton startButton = new JButton("Start Game");
@@ -47,7 +49,7 @@ public class GraphicProject extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (!animator.isAnimating()) {
                     animator.start();
-                    startButton.setText("Pause");
+                    startButton.setText("Stop Game");
                 } else {
                     animator.stop();
                     startButton.setText("Start Game");
