@@ -67,7 +67,11 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
     private int score2 = 0;
     private long startTime ;
 
+<<<<<<< HEAD
     //ives
+=======
+    // Lives
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
     int life1Index = 71;
     int life2Index = 72;
     int life3Index = 73;
@@ -364,7 +368,11 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 }
             }
         } else if (!checkCollision(x, y, x11, 55)) {
+<<<<<<< HEAD
             hasCollided1 = false;
+=======
+            hasCollided = false;
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
         }
 
         // tree
@@ -397,7 +405,11 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
        //lives
         drawLives1(gl, playerLives1);
 
+<<<<<<< HEAD
         drawLives2(gl, playerLives2);
+=======
+        drawLives2(gl, playerLives);
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
 
         if (GameOver2) {
 
@@ -428,17 +440,26 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
 
         //collision
         if (!isJump1 && checkCollision(x, y, x11, y11)) { // collision monster with player1
+<<<<<<< HEAD
             if (!hasCollided1) {
                 playerLives1--;
                 System.out.println("Collision detected! Lives left: " + playerLives1);
                 hasCollided1 = true;
                 if (playerLives1 <= 0) {
+=======
+            if (!hasCollided) {
+                playerLives--;
+                System.out.println("Collision detected! Lives left: " + playerLives);
+                hasCollided = true;
+                if (playerLives <= 0) {
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
                     GameOver2 = true;
                 } else {
                     resettreeposition();
                 }
             }
         } else if (!checkCollision(x, y, x11, 55)) {
+<<<<<<< HEAD
             hasCollided1 = false;
 
         }
@@ -448,14 +469,34 @@ public class AnimGLEventListener extends AnimListener implements MouseListener ,
                 System.out.println("Collision detected! Lives left: " + playerLives2);
                 hasCollided2 = true;
                 if (playerLives2 <= 0) {
+=======
+            hasCollided = false;
+//            GameOver2 = true;
+//            System.out.println("Collision1 detected! Game Over.");
+//            return;
+        }
+        if (!isJump2 && checkCollision2(x2, y2, x12, y12)) {
+            if (!hasCollided) {
+                playerLives--;
+                System.out.println("Collision detected! Lives left: " + playerLives);
+                hasCollided = true;
+                if (playerLives <= 0) {
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
                     GameOver2 = true;
                 } else {
                     resettreeposition();
                 }
             }
         } else if (!checkCollision(x, y, x11, 55)) {
+<<<<<<< HEAD
             hasCollided2 = false;//collision monster with player2
 
+=======
+            hasCollided = false;//collision monster with player2
+//            GameOver2 = true;
+//            System.out.println("Collision2 detected! Game Over.");
+//            return;
+>>>>>>> f39536384cc595e13ff9bd48316fc5a2fa7504bb
         }
 
         //tree
